@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'io.projectreactor:reactor-core:3.5.8'
+    testImplementation "io.projectreactor.tools:blockhound:1.0.7.RELEASE"
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// https://github.com/reactor/BlockHound#jdk13-support
+tasks.withType(Test).all {
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+        jvmArgs += [
+                "-XX:+AllowRedefinitionToAddDeleteMethods"
+        ]
+    }
+}
+
